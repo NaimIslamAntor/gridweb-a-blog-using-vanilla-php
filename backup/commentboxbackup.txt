@@ -1,0 +1,19 @@
+if(isset($_SESSION['id']) == true){?>
+<section class="comment__section">
+    <form method="POST" action="in.php">
+
+        <div class="comment__description">
+            <textarea id="comment" name="comment" class="comment__class" placeholder="Comment"></textarea>
+        </div>
+        <input id="post_id" type="hidden" name="post_id" value="<?php echo $blog; ?>">
+        <input id="user_id" type="hidden" name="user_key" value="<?php echo $_SESSION['id']; ?>">
+        
+
+        <center><input  type="submit" value="POST" name="commenting" class="comment__button"></center>
+        <br>
+        <!-- <br>
+        <center><input id="commenting" type="submit" value="Ajax POST"  class="comment__button"></center> -->
+     
+    </form>
+    <div id="done"></div>
+</section>

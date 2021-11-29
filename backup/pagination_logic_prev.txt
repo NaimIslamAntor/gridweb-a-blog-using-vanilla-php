@@ -1,0 +1,18 @@
+// $page__starting__point;
+// $page__ending__point;
+
+// if($a__num >= 5 && $blog__page < 4){
+//     $page__starting__point = 1;
+//     $page__ending__point = 5;
+// }elseif($a__num < 5 && $blog__page < 4){
+//     $page__starting__point = 1;
+//     $page__ending__point = $a__num;
+// }elseif ($a__num >= 5 && $blog__page >= 4) {
+
+//     $page__starting__point = $blog__page - 2;
+//     $page__ending__point = $blog__page + 2;  
+
+//     if($page__ending__point > $a__num){
+//         $page__starting__point = $blog__page - $page__starting__point;
+//         $page__ending__point = $a__num;
+//     }}

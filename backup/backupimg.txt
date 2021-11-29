@@ -1,0 +1,19 @@
+      <img src="profile.pictures/<?php if($profile_pic < 2){ if($_SESSION['User_Gender'] == 'Male')
+            { echo 'male.png'; }else if($_SESSION['User_Gender'] == 'Female'){ echo 'female.png'; }else{
+                echo 'Other.png';
+            }}else{
+                echo $uvalue['profile_picture']; }
+            ?>" alt="<?php echo $_SESSION['First_Name'].' '.$_SESSION['Last_Name']; ?>"
+             class="profile_picture">
+
+
+
+<?php  
+
+     $masterView_for_blog = new Masterview();
+     foreach ($masterView_for_blog->fetchBlogpost('blogpost', 1) as $key => $b_value_for_b_p) {?>
+
+    <a href="blog.php?page=1&&latest_post=<?php echo $b_value_for_b_p['id']; ?>">Blog</a>
+
+   <?php  }
+?>

@@ -1,0 +1,21 @@
+ function user_login_function($user_token){
+    $masterview2_ob_1 = new Masterview2();
+    if($masterview2_ob_1->userlogin('users', 'security_token', $user_token) == 1){
+        $master_view_session_obj = new Masterview();
+        foreach ($master_view_session_obj->selectanthngbyid('users', 'security_token', $user_token) as $key => $session_value) {
+    
+            $_SESSION['id'] = $session_value['id'];
+            $_SESSION['First_Name'] = $session_value['First_Name'];
+            $_SESSION['Last_Name'] = $session_value['Last_Name'];
+            $_SESSION['User_Gender'] = $session_value['User_Gender'];
+            $_SESSION['User_Namee'] = $session_value['User_Namee'];
+            $_SESSION['User_Password'] = $session_value['User_Password'];
+            $_SESSION['security_token'] = $session_value['security_token'];
+            $_SESSION['is_verified'] = $session_value['is_verified'];
+    
+            header("location: profile.php?id=".$_SESSION['id']);
+        }
+    }else{
+        header("location: http://localhost/gridweb/?username and password don't matched#login");
+    }
+}

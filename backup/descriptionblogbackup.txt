@@ -1,0 +1,337 @@
+<?php 
+session_start();
+require_once('header.php');
+        
+    
+    if(isset($_GET['post'])){
+        $blog = $_GET['post'];
+        
+        $viewblog = new Masterview();
+        foreach ($viewblog->selectanthngbyid('blogpost','id', $blog) as $key => $actual_Post) { ?>
+            
+<section class="title__section">
+    <h1 class="title__post"><?php echo $actual_Post['title']; ?></h1>
+    <div class="date__category--tags">
+        <span class="siblings sib1"><?php echo $actual_Post['date']; ?></span>
+        <span class="siblings">Category : </span>
+        <?php
+        //for category  
+
+        $viewobjcat1 = new Masterview();
+     foreach ($viewobjcat1->selectanthngbyid('blogpost_category', 'blogpost_id', $blog) as $key => $blogpos_id_catching) {
+         $category_id = $blogpos_id_catching['category_id'];
+                $viewobjcat2 = new Masterview();
+        foreach ($viewobjcat2->selectanthngbyid('blogpost_meta', 'id', $category_id) as $key => $category_label) {
+            $category_label_val = $category_label['category']; ?>
+  
+                   
+        <span class="siblings"><?php echo $category_label_val.","; ?></span>
+        <?php } } ?>
+        <span class="siblings">Tags : <?php echo $actual_Post['postTags']; ?></span>
+        <?php 
+        //fetching views for blogposts
+              $masterview_obj_for_view = new Masterview();
+              $firing_view_counts_num = $masterview_obj_for_view->showrow('views', 'postId', $blog);
+         ?>
+    <span style="text-align:center;" class="siblings view"><?php if($firing_view_counts_num > 1 )
+        { echo "views : ".$firing_view_counts_num; }else{
+            echo "view : ".$firing_view_counts_num;
+        }?></span>
+        
+    </div>
+</section>
+
+<section class="content__section">
+    <div class="img--features">
+        <img src="thumbnail/<?php echo $actual_Post['thumbnail']; ?>" alt="<?php echo $actual_Post['alt']; ?>" class="features-thumbnail">      
+    </div>
+    <div class="content---blog">
+        <?php echo $actual_Post['postcontent']; ?>
+    </div>
+</section>
+<!-- Related post section start -->
+<section class="blog">
+    <div class="blog__container">
+        
+      <?php      $masterviewongrel1 = new Masterview();
+    foreach ($masterviewongrel1->selectanthngbyid('blogpost_category', 'blogpost_id', $blog) as $key => $blogpos_id_catching) {
+                $category_id = $blogpos_id_catching['category_id'];
+                $masterviewongrel2 = new Masterview();
+    foreach ($masterviewongrel2->selectanthngbyid('blogpost_category', 'category_id', $category_id) as $key => $reco_data) {
+                $blogpost_id = $reco_data['blogpost_id'];
+                $masterviewongrel3 = new Masterview();
+    foreach ($masterviewongrel3->selectanthngbyid('blogpost', 'id', $blogpost_id) as $key => $reco_blogpost) {
+                    $post = $reco_blogpost['id'];
+                        $data = 1;
+         if($post == $blog){?>
+                     
+<div class="blog__main" style="display:none;">
+</div>
+
+<?php }else{?>
+    <div class="blog__main">
+            <div class="blog__box">
+                <div class="blog__thumbnail">
+                <a href="in.php?post=<?php echo $post; ?> && view=<?php echo $data; ?>">
+                    <img src="thumbnail/<?php echo $reco_blogpost['thumbnail']; ?>" alt="<?php echo $reco_blogpost['alt']; ?>" class="post__thumbnail">
+                     </a>
+                </div>
+                <div class="blog__content">
+                <a href="in.php?post=<?php echo $post; ?> && view=<?php echo $data; ?>">
+                    <h2 class="post__title">
+                    
+                    <?php echo $reco_blogpost['title']; ?>
+                    </h2>
+                    <a/>
+                    <a href="in.php?post=<?php echo $post; ?> && view=<?php echo $data; ?>">
+                    <p class="post_excerpt"><?php echo $reco_blogpost['excerpt']; ?>
+                    </p>
+                     </a>
+                    <a href="in.php?post=<?php echo $post; ?> && view=<?php echo $data; ?>" class="btn">Read More</a>
+                </div>
+            </div>
+        </div>
+             <?php   }} } } ?>
+               
+    </div>
+</section>
+<!-- Related post section start -->
+<?php
+
+if(isset($_SESSION['id']) == true){?>
+<section class="comment__section">
+    <form method="POST" action="in.php">
+
+        <div class="comment__description">
+            <textarea id="comment" name="comment" class="comment__class" placeholder="Comment"></textarea>
+        </div>
+        <input id="post_id" type="hidden" name="post_id" value="<?php echo $blog; ?>">
+        <input id="user_id" type="hidden" name="user_key" value="<?php echo $_SESSION['id']; ?>">
+        
+
+        <center><input  type="submit" value="POST" name="commenting" class="comment__button"></center>
+        <br>
+        <!-- <br>
+        <center><input id="commenting" type="submit" value="Ajax POST"  class="comment__button"></center> -->
+     
+    </form>
+    <div id="done"></div>
+</section>
+<?php }else{?>
+<div style="text-align: center;">
+<a href="http://localhost/gridweb/register.php">Sign Up</a><span> or </span> 
+<a href="http://localhost/gridweb/#login">Log in</a> <span>for posting a comment</span>
+</div>
+<?php } ?>
+
+
+<!-- <div>
+    
+    <a href="" class="logout_class">Log Out</a>
+</div> -->
+<?php
+
+$viewobj3 = new Masterview();
+$num_of_cmnts = $viewobj3->showrow('comments', 'post_id', $blog);
+?>
+
+<h2 class="total__comments">Total : <?php if($num_of_cmnts > 0){ echo $num_of_cmnts; }else{ echo "0"; } ?> </h2>
+<?php
+$viewobj1 = new Masterview();
+
+foreach ($viewobj1->cmnttitle('comments', 'post_id', $blog) as $key => $commentactual) { 
+    $user_key = $commentactual['user_key']; ?>
+<section  class="comment__label-section">
+     <div class="actual__comment--block">
+<?php 
+$view_obj_for_user = new Masterview();
+foreach ($view_obj_for_user->selectanthngbyid('users', 'id', $user_key) as $key => $user_details) { 
+ ?>
+<h3 style="text-align: center;"><b><span><?php echo $user_details['First_Name']; ?></span>
+<span> <?php echo $user_details['Last_Name']; if(isset($_SESSION['id']) == true){
+    if($user_key == $_SESSION['id']){ 
+        echo '<span style="font-weight:600;color:red;">(you)</span>';
+     } 
+} ?>
+</span></b></h3>
+
+    <?php } ?>
+<div class="comment__description" style="text-align: center;flex-direction: column;">
+<div>
+<p class="comment__label"><?php echo $commentactual['comment']; ?></p>
+</div>
+<div>
+<p class="Comment-date"><?php echo $commentactual['comment_date']; ?></p>
+</div>
+  
+</div>
+</div>
+</section>
+<?php   }}  }   
+require_once('footer.php'); 
+exit;
+?>
+
+
+
+
+
+
+comment section backup
+<section class="comment-section">
+<?php
+$viewobj1 = new Masterview();
+    foreach ($viewobj1->cmnttitle('comments', 'post_id', $blog) as $key => $commentactual) { 
+        $user_key = $commentactual['user_key']; 
+        $commentID = $commentactual['id'];
+        ?>
+    <div  class="comment__label-section" data-comment-block="<?php echo $commentID; ?>">
+         <div class="actual__comment--block">
+    <?php 
+    $view_obj_for_user = new Masterview();
+    foreach ($view_obj_for_user->selectanthngbyid('users', 'id', $user_key) as $key => $user_details) { 
+        $user_ID = $user_details['id'];
+        $fname = $user_details['First_Name'];
+        $lname = $user_details['Last_Name'];
+        ?>
+     <div class="cmnt_arrange_box">
+    <div class="user-block-for-comment-section">
+    <a href="profile.php?id=<?php echo $user_ID; ?>"><img src="<?php show_profile_picture($user_key); ?>" alt="<?php echo $fname.' '.$lname; ?>" class="profile_shortcurt_image cmnter_profile_pivture"></a>
+    
+    <a class="u_link" href="profile.php?id=<?php echo $user_ID; ?>">
+    <h3 class="user-detail-in-comment" style="text-align: center;">
+    
+    <b><span><?php echo $fname; ?></span>
+    <span> <?php echo $lname; if(isset($_SESSION['id']) == true){
+        if($user_key == $_SESSION['id']){ 
+            echo '<span style="font-weight:600;color:red;">(you)</span>';
+         } 
+    } ?>
+    </span>
+    </b>
+    </h3>
+    </a>
+    </div>
+    <?php if(isset($_SESSION['id'])){ 
+        if($_SESSION['id'] === $user_key){ ?>
+        <div class="button-group">
+        <button class="edit-btn edit edit-event" data-commentlabel="<?php echo $commentactual['comment']; ?>"
+         data-check="<?php  echo $commentID; ?>" onclick="commentEdit(event)"><i class="fas fa-pen editcmnt"></i></button>
+        <a class="delete-btn delete" onclick="deleteComment(event)" data-comment-delete="<?php echo $commentID; ?>"><i class="far fa-trash-alt deletecmnt"></i></a>
+    </div>
+       <?php }} ?>
+    
+    </div>
+    
+        <?php } ?>
+    <div class="comment__description comment__description2">
+    <div class="comment">
+    <p data-id-for-up-comment=<?php  echo $commentID; ?> class="comment__label"><?php echo $commentactual['comment']; ?></p>
+    </div>
+    <div class="comment">
+    <p class="Comment-date"><?php echo $commentactual['comment_date']; ?></p>
+    
+    </div>
+    <?php
+    
+    if(isset($_SESSION["id"])){ if($user_key === $_SESSION["id"]){ ?>
+                 <div class="edit_textrea" data-comment="<?php  echo $commentID; ?>"></div>
+                                  <?php }} ?>
+    </div>
+    </div>      
+    </div>
+    
+
+<?php   }  echo '</section>';
+ }}   
+?>
+
+
+<?php
+session_start();
+require_once('ooprequirements.php');
+include_once('function.arrange.php');
+
+if(isset($_SESSION['id']) && isset($_SESSION['User_Namee']) && isset($_SESSION['security_token'])){
+    $session_id = $_SESSION['id'];
+if(isset($_REQUEST['ppsubmit'])){
+
+    $file = $_FILES["user_profile_picture"];
+    $file_name = $_FILES["user_profile_picture"]["name"];
+    $file_type = $_FILES["user_profile_picture"]["type"];
+    $file_tmp_name = $_FILES["user_profile_picture"]["tmp_name"];
+    $file_error = $_FILES["user_profile_picture"]["error"];
+    $file_size = $_FILES["user_profile_picture"]["size"];
+    //print_r($file);
+    $directory = 'profile.pictures';
+    $table_data = 'profile_pictures';
+    $table_column1 = 'profile_picture';
+
+    upload_pp_cv($file_name, $file_error, $file_size, $file_tmp_name,
+     $directory, $_SESSION['id'], $table_data, $table_column1);
+
+     exit($file_name);
+    
+}elseif(isset($_REQUEST['bbpicsubmit'])){
+
+    $file = $_FILES["user_profile_picture"];
+    $file_name = $_FILES["user_profile_picture"]["name"];
+    $file_type = $_FILES["user_profile_picture"]["type"];
+    $file_tmp_name = $_FILES["user_profile_picture"]["tmp_name"];
+    $file_error = $_FILES["user_profile_picture"]["error"];
+    $file_size = $_FILES["user_profile_picture"]["size"];
+    
+    $directory = 'coverrr.pictures';
+    $table_data = 'cover_pictures';
+    $table_column1 = 'cover_picture';
+
+    upload_pp_cv($file_name, $file_error, $file_size, $file_tmp_name,
+    $directory, $_SESSION['id'], $table_data, $table_column1);
+}elseif(isset($_REQUEST["profile"])){
+
+    $pro_file_meta_data = $_REQUEST["proval"];
+    $column = 'profile_picture';
+    $table = 'profile_pictures';
+    Update_cover_and_profile_pic_mini($pro_file_meta_data, $column);
+    header("location: profile.php?id=$session_id");
+    //uploading($table, $_SESSION['id'], 'file_meta_data', 'user_id', $_SESSION['id']);
+
+}elseif(isset($_REQUEST["cover"])){
+    $pro_file_meta_data = $_REQUEST["proval"];
+    $column = 'cover_picture';
+    Update_cover_and_profile_pic_mini($pro_file_meta_data, $column);
+    header("location: profile.php?id=$session_id");
+
+}elseif (isset($_REQUEST["e"])) {
+    $directory = $_REQUEST['directory'];
+    $pro_file_meta_data = $_REQUEST['proval'];
+    $tableee = $_REQUEST['tableee'];
+
+    task_to_task($directory, $pro_file_meta_data, $tableee);
+    header("location: profile.php?id=$session_id");
+
+    
+}elseif (isset($_REQUEST["commenting"])) {
+    $post_id = $_REQUEST["post_id"];
+    $comment = str_replace("'", "\'", $_REQUEST["comment"]);
+    $user_key = $_SESSION['id'];
+    $date = getdate(Date("U"));
+    $comment_date = "$date[mday] $date[month] $date[year]";
+    //commenting method call
+     $cntr_obj2 = new Mastercntr();
+     $cntr_obj2->comments($post_id, $user_key, $comment, $comment_date);
+
+     comment($post_id);
+}elseif (isset($_REQUEST["click"]) && $_REQUEST["click"] === "forUpdate") {
+    $cmntVal = $_REQUEST["cmntVal"];
+    $cmntId = $_REQUEST["cmntId"];
+
+    $mastercntr_ajax_object = new Mastercntr2();
+    $mastercntr_ajax_object->upadte_pp_and_cv('comments', 'comment', $cmntVal, 'id', $cmntId);
+    exit($cmntVal);
+}elseif (isset($_REQUEST["comment_id"])) {
+    $id = $_REQUEST["comment_id"];
+    $masterview_delete_object = new Mastercntr();
+    $masterview_delete_object->anOtherdelete('comments', 'id', $id);
+}
+}

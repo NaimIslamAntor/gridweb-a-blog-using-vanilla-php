@@ -1,0 +1,73 @@
+ *{
+     margin: 0;
+     padding: 0;
+        box-sizing: border-box;
+        text-decoration:none;
+    }
+         .serach-btn{
+            background:#f7f7f7;
+            outline:none;
+            border:1px solid #efefef;
+            padding: 0.3em 0.5em;
+            cursor:pointer;
+        }
+        .searchbar-input{
+                width: 90%;
+                height: 40px;
+                border: 1px solid #efefef;
+                border-radius:5px;
+            }
+        .searchhhh{
+            max-width:400px;
+        }
+        .serach-btn:hover{
+            background:#f5f5f5;
+        }
+        .post__thumbnail{
+            max-width:72%; 
+        }
+        .search__divbackup__container {
+            display: grid;
+            place-items: center;
+        }
+        .search__backhupmessage {
+            width: 60%;
+        }
+        .empty__backup {
+            text-align: center;
+            color: red;
+        }
+        @media(min-width:700px){
+           
+            .search__container{
+            max-width:80%;
+            margin:auto;
+        }
+        .blog__box{
+            display:flex;
+        }
+        .post__thumbnail{
+            width:72%;
+            margin-top:1.5em;
+        }
+        .searchhhh{
+            width:500px;
+        }
+        .btn{
+            float:right;
+        }
+       
+        }
+
+@media(min-width:1000px){
+.searchhhh{
+            width:950px;
+        }
+.searchbar-input{
+width: 100%;
+}
+.search__backhupmessage {
+    width: 30%;
+    max-width: 450px;
+}
+}

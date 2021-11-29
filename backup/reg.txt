@@ -1,0 +1,40 @@
+function user_registration($First_Name, $Last_Name, $User_Gender, $User_Namee,
+ $user_normal_password, $User_Password, $confirm_Password, $user_token, $rememberme){
+
+    if(!empty($First_Name) && !empty($Last_Name)){
+        $view_obj_for_user_reg = new Masterview();
+
+        if(filter_var($User_Namee, FILTER_VALIDATE_EMAIL)){
+            $user_provided_length = strlen($user_normal_password);
+
+            $password_length = 6;
+            if($user_provided_length >= $password_length){
+                if($User_Password === $confirm_Password){
+
+                    if($view_obj_for_user_reg->showrow('users', 'User_Namee', $User_Namee) != 1){
+                        $master2cntr_obj = new Mastercntr2();
+                        $master2cntr_obj->signup($First_Name, $Last_Name, $User_Gender, $User_Namee, $User_Password, $user_token);
+                        $masterview_obj = new Masterview();
+                        foreach ($masterview_obj->fetchBlogpost('users', 1) as $key => $keyvalue) {
+                            $current_id = $keyvalue['id'];
+
+                            $master2cntr_obj->profile('users_profile', 'user_id', $current_id);
+                        }
+                        header("location: in.php?wait_we_are_redirecting you && token=$user_token && rememberme=$rememberme");
+                        
+                      }else{
+                            header("location: register.php?the user has been taken");
+                     }
+                }else{
+                    header("location: register.php?password not matched");
+                }
+              }else{
+                header("location: register.php?password is too short");
+               }
+            }else{
+                header("location: register.php?enter a valid email");
+            }
+            }else{
+                header("location: regster.php?fill the required field");
+        }
+ }

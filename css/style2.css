@@ -1,0 +1,68 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.people_container {
+    margin-top: 80px;
+}
+
+.people_heading {
+    text-align: center;
+    padding-bottom: 0.4em;
+    text-transform: capitalize;
+}
+
+
+.people
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.people:nth-child(1){
+    margin-top: 0;
+}
+.people{
+    margin-top: 0.5em;
+}
+.people_pro{
+    padding-right: 0.5em;
+}
+.people_profile_link {
+    color: #000;
+}
+.action {
+    padding-left: 0.5em;
+    margin-top: 0.3em;
+    overflow: hidden;
+    position: relative;
+}
+
+
+.follow_btn {
+    background: #00c3ff;
+    padding: 0.3em;
+    color: #fff;
+}
+
+.fas.fa-plus {
+    margin-top: 0.3em;
+}
+
+
+@media(min-width: 768px){
+    .people__mini-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+}
+
+@media(min-width: 1000px){
+    .people__mini-container {
+        margin: 0 auto;
+        max-width: 1000px;
+    }
+}
